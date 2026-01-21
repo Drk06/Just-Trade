@@ -10,7 +10,8 @@ function Education() {
       <img
         src="photos/education.svg" 
         alt="Varsity illustration"
-        className="img-fluid"
+        
+        style={{width:"80%", height:"80%" }}
       />
     </div>
 
