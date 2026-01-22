@@ -1,14 +1,32 @@
-
 import HomePage from './landing_page/home/HomePage'
+import { Routes, Route } from "react-router-dom";
+import PricingPage from './landing_page/pricing/PricingPage';
+import AboutPage from './landing_page/about/Aboutpage';
+import SignUp from './landing_page/signup/Signup';
+import SupportPage from './landing_page/support/SupportPage';
+import ProductPage from './landing_page/products/Productpage';
+import Navbar from './landing_page/Navbar';
+import Footer from './landing_page/Footer';
+import Notfound from './landing_page/Notfound';
+
 
 function App() {
-
-
   return (
     <>
-     <HomePage/>
+    <Navbar/>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="/about" element={<AboutPage />} />
+      <Route path="/product" element={<ProductPage />} />
+      <Route path="/pricing" element={<PricingPage />} />
+      <Route path="/support" element={<SupportPage />} />
+       <Route path="/*" element={<Notfound />} />
+    </Routes>
+    <Footer/>
+    
     </>
-  )
+  );
 }
 
-export default App
+export default App;
