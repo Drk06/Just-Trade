@@ -1,33 +1,46 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-
+import React, { useState, useContext } from "react";
 import axios from "axios";
-
+import { Link } from "react-router-dom";
 import GeneralContext from "./GeneralContext";
-
 import "./BuyActionWindow.css";
 
-const BuyActionWindow = ({ uid }) => {
+const BuyActionWindow = () => {
+  const { selectedStock, closeBuyWindow } = useContext(GeneralContext);
   const [stockQuantity, setStockQuantity] = useState(1);
   const [stockPrice, setStockPrice] = useState(0.0);
 
-  const handleBuyClick = () => {
-    axios.post("http://localhost:3002/newOrder", {
-      name: uid,
-      qty: stockQuantity,
-      price: stockPrice,
-      mode: "BUY",
-    });
+  const handleBuyClick = async () => {
+    try {
+     const token = localStorage.getItem("token");
+  console.log("bought");
+    await axios.post(
+      "http://localhost:5000/api/neworder",
+      {
+        name: selectedStock,
+        qty: Number(stockQuantity),
+        price: Number(stockPrice),
+        mode: "BUY",
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-    GeneralContext.closeBuyWindow();
+    }catch(err){
+      console.err(err);
+    }
+    
+   closeBuyWindow();
   };
 
   const handleCancelClick = () => {
-    GeneralContext.closeBuyWindow();
+    closeBuyWindow();
   };
 
   return (
-    <div className="container" id="buy-window" draggable="true">
+     <div className="container" id="buy-window" draggable="true">
       <div className="regular-order">
         <div className="inputs">
           <fieldset>

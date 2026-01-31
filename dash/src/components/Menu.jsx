@@ -1,17 +1,46 @@
-import React, { useState } from "react";
-
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Menu = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
-  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const [username, setUsername] = useState("");
+
+  const navigate = useNavigate();
 
   const handleMenuClick = (index) => {
     setSelectedMenu(index);
   };
 
-  const handleProfileClick = (index) => {
-    setIsProfileDropdownOpen(!isProfileDropdownOpen);
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      try {
+        const res = await axios.post(
+          "http://localhost:5000/api/me",
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setUsername(res.data.user || "");
+      } catch (err) {
+        localStorage.removeItem("token");
+        navigate("/login");
+      }
+    };
+
+    fetchUser();
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
   };
 
   const menuClass = "menu";
@@ -21,11 +50,11 @@ const Menu = () => {
     <div className="menu-container">
       <img src="logo.png" style={{ width: "50px" }} />
       <div className="menus">
-        <ul>
+        <ul style={{paddingBottom:0}}>
           <li>
             <Link
               style={{ textDecoration: "none" }}
-              to="/"
+              to="/kite"
               onClick={() => handleMenuClick(0)}
             >
               <p className={selectedMenu === 0 ? activeMenuClass : menuClass}>
@@ -36,7 +65,7 @@ const Menu = () => {
           <li>
             <Link
               style={{ textDecoration: "none" }}
-              to="/orders"
+              to="/kite/orders"
               onClick={() => handleMenuClick(1)}
             >
               <p className={selectedMenu === 1 ? activeMenuClass : menuClass}>
@@ -47,7 +76,7 @@ const Menu = () => {
           <li>
             <Link
               style={{ textDecoration: "none" }}
-              to="/holdings"
+              to="/kite/holdings"
               onClick={() => handleMenuClick(2)}
             >
               <p className={selectedMenu === 2 ? activeMenuClass : menuClass}>
@@ -58,7 +87,7 @@ const Menu = () => {
           <li>
             <Link
               style={{ textDecoration: "none" }}
-              to="/positions"
+              to="/kite/positions"
               onClick={() => handleMenuClick(3)}
             >
               <p className={selectedMenu === 3 ? activeMenuClass : menuClass}>
@@ -69,7 +98,7 @@ const Menu = () => {
           <li>
             <Link
               style={{ textDecoration: "none" }}
-              to="funds"
+              to="/kite/funds"
               onClick={() => handleMenuClick(4)}
             >
               <p className={selectedMenu === 4 ? activeMenuClass : menuClass}>
@@ -78,21 +107,20 @@ const Menu = () => {
             </Link>
           </li>
           <li>
-            <Link
-              style={{ textDecoration: "none" }}
-              to="/apps"
-              onClick={() => handleMenuClick(6)}
-            >
-              <p className={selectedMenu === 6 ? activeMenuClass : menuClass}>
-                Apps
-              </p>
-            </Link>
+            <p
+            className={menuClass}
+            onClick={handleLogout}
+            style={{ cursor: "pointer", marginTop: "6px", color: "#dc3545" }}
+          >
+            Logout
+          </p>
           </li>
         </ul>
         <hr />
-        <div className="profile" onClick={handleProfileClick}>
-          <div className="avatar">ZU</div>
-          <p className="username">USERID</p>
+        <div className="profile" style={{ cursor: "default" }}>
+          <div className="avatar">{username ? username[0].toUpperCase() : "U"}</div>
+          <p className="username">{username || "USERID"}</p>
+          
         </div>
       </div>
     </div>

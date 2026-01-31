@@ -9,6 +9,7 @@ const Funds = () => {
         <Link className="btn btn-green">Add funds</Link>
         <Link className="btn btn-blue">Withdraw</Link>
       </div>
+      
 
       <div className="row">
         <div className="col">

@@ -10,7 +10,7 @@ function Hero() {
             Invest in everything
           </h1>
           <p>Online platform to invest in stocks, derivates, mutual funds, ans more</p>
-          <button className="btn btn-primary p-2 fs-5 mb-5" style={{width:"20%", margin:"0 auto" }}> SignUp Now </button>
+           <a href="http://localhost:5173/signup"> <button className="btn btn-primary p-2 fs-5 mb-5" style={{width:"20%", margin:"0 auto" }}> Sign Up Now </button></a>
         </div>
     </div>
     </div>
